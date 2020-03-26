@@ -1,2 +1,33 @@
 The principle used for the implementation of the algorithm comes from the explanations established by Mr. Thomas Closen.
 https://www.linkedin.com/in/thomasclausen/?originalSubdomain=fr
+
+The Server
+The basic functioning (and, you can infer, "high-level algorithm") of the server is as follows:
+
+Wait for clients to connect -- i.e., waits for a TXT message saying "Hello" from a new client.
+Accept new clients while the number of connected clients < 2 - and reject new clients when 2 clients are already connected.
+Start the game when two clients are connected.
+Maintain the state of the game (i.e., the 3x3 board), notify the clients of this state, and (in turn) request moves from each of  the players.
+The server also validates the moves of each player. If a players' move is invalid (i.e., if the attempted position is already filled), the server sends a text message to the client, and requests a new move.
+Terminate the game when: (a) the board is completely filled, (b) one of the players has "three-in-line".
+Notify the players of who has won (if there is a winner).
+The Client
+The basic functioning (and, you can infer, "high-level algorithm")of the client is as follows:
+
+Connect to Server and sends a TXT message saying "Hello".
+Wait for instructions from the server
+Interact with the player (user): during a players' turn, it displays the status of the board and request moves from the user
+Messages 
+We will have a closer look at messages types and formats that we will use later. For now, we'll simply introduce the basics.
+
+From the server to the clients, the following messages can be sent:
+
+TXT: Text message (to be displayed at the screen of the client). The message terminates with the string termination ('\0') character.
+MYM: Make Your Move, a message with no arguments that instructs the client to "make a move" (i.e., to place an X or an O on the board).
+END: Terminates game, and indicates winner (0 in case of draw, 1 if player 1 has won, 2 if player 2 has won). This message, with a value of 255 (0xFF) is used to indicate to a new client which attempts to connect, that there is no room for new participants.
+FYI: "For Your Information", these are the occupied positions on the board. This message will have from zero to n arguments, where n is the number of occupied positions on the board. For each occupied position, the player ID, the column, and the row, is indicated.
+From the clients to the server:
+
+MOV: Gives the coordinates of a "move", i.e., of where a player positions its symbol ("X" or "O").
+TXT: Text message (to be displayed at the screen of the client). The message terminates with the string termination ('\0') character. This message is used by the client only as the initial "Hello"
+

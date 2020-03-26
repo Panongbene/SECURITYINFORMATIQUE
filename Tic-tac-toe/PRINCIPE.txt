@@ -1,0 +1,2 @@
+The principle used for the implementation of the algorithm comes from the explanations established by Mr. Thomas Closen.
+https://www.linkedin.com/in/thomasclausen/?originalSubdomain=fr
